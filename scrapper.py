@@ -16,8 +16,9 @@ def main(argv):
     }
 
     # Create a new instance of the Chrome driver
-    driver = webdriver.Chrome(
-        "C:/Users/Nirman/AppData/Local/Programs/Python/Python37/chromedriver.exe")
+    op = webdriver.ChromeOptions()
+    op.add_argument('headless')
+    driver = webdriver.Chrome(options=op)
 
     # Go to the specified website
     # pass (argv --> video link) in the get method
