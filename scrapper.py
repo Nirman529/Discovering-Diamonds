@@ -1,28 +1,35 @@
+from traceback import print_tb
 from seleniumwire import webdriver
 from seleniumwire.utils import decode
 import requests
 import json
 import time
+import sys
 
 
 def main(argv):
+
+    print(argv)
     headers = {
         'X-Requested-With': 'XMLHttpRequest',
         'content-type': 'application/octet-stream'
     }
 
     # Create a new instance of the Chrome driver
-    driver = webdriver.Chrome(
-        "C:/Users/Nirman/AppData/Local/Programs/Python/Python37/chromedriver.exe")
+    op = webdriver.ChromeOptions()
+    op.add_argument('headless')
+    driver = webdriver.Chrome(options=op)
 
     # Go to the specified website
-    driver.get(
-        'https://v3601506.v360.in/vision360.html?d=11914-516259491&z=1&surl=https%3a%2f%2fv3601506.v360.in%2f')
+    # pass (argv --> video link) in the get method
+
+    driver.get(argv[0])
+    # 'https://v3601506.v360.in/vision360.html?d=11914-516259491&z=1&surl=https%3a%2f%2fv3601506.v360.in%2f'
 
     time.sleep(20)
     # Access requests via the `requests` attribute
     count = 0
-    res = []
+    urls = []
 
     for request in driver.requests:
         count = count + 1
@@ -31,16 +38,15 @@ def main(argv):
 
             if request.url.startswith("https://v3601506.v360.in/imaged/"):
                 print("url : ", request.url)
-                res.append(request.url)
+                urls.append(request.url)
 
-    print(count)
-
-    print(res)
+    print("Total requests made:", count)
+    print("Urls extracted:", urls)
 
     count = 0
     json_result = []
 
-    for url in res:
+    for url in urls:
         # Create file name for image file
         fileName = str(count)+'.json'
 
@@ -62,3 +68,7 @@ def main(argv):
         print('length of file: ', len(json_result[count]))
 
         count = count + 1
+
+
+if __name__ == "__main__":
+    main(sys.argv[1:])
