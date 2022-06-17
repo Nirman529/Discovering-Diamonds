@@ -19,7 +19,7 @@ def main(argv):
     op = webdriver.ChromeOptions()
     op.add_argument('headless')
     driver = webdriver.Chrome(options=op)
-    
+
     # Go to the specified website
     # pass (argv --> video link) in the get method
 
