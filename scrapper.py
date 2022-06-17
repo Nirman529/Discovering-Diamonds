@@ -12,9 +12,10 @@ def main(argv):
     }
 
     # Create a new instance of the Chrome driver
-    driver = webdriver.Chrome(
-        "C:/Users/Nirman/AppData/Local/Programs/Python/Python37/chromedriver.exe")
-
+    op = webdriver.ChromeOptions()
+    op.add_argument('headless')
+    driver = webdriver.Chrome(options=op)
+    
     # Go to the specified website
     driver.get(
         'https://v3601506.v360.in/vision360.html?d=11914-516259491&z=1&surl=https%3a%2f%2fv3601506.v360.in%2f')
@@ -62,3 +63,7 @@ def main(argv):
         print('length of file: ', len(json_result[count]))
 
         count = count + 1
+
+
+if __name__ == "__main__":
+    main("temp")
