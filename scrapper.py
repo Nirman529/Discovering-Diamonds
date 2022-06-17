@@ -22,9 +22,8 @@ def main(argv):
     # Go to the specified website
     # pass (argv --> video link) in the get method
 
-    driver.get(
-        'https://v3601506.v360.in/vision360.html?d=11914-516259491&z=1&surl=https%3a%2f%2fv3601506.v360.in%2f'
-    )
+    driver.get(argv[0])
+    # 'https://v3601506.v360.in/vision360.html?d=11914-516259491&z=1&surl=https%3a%2f%2fv3601506.v360.in%2f'
 
     time.sleep(20)
     # Access requests via the `requests` attribute
@@ -71,4 +70,4 @@ def main(argv):
 
 
 if __name__ == "__main__":
-    main(sys.argv[2:])
+    main(sys.argv[1:])
