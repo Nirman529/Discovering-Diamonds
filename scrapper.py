@@ -1,42 +1,64 @@
+from seleniumwire import webdriver
+from seleniumwire.utils import decode
 import requests
 import json
+import time
 
-headers = {
-    'X-Requested-With': 'XMLHttpRequest'
-}
 
-'''
-    To do:
-    --> Make the program dynamic
-    --> Convert program to functional program
-'''
+def main(argv):
+    headers = {
+        'X-Requested-With': 'XMLHttpRequest',
+        'content-type': 'application/octet-stream'
+    }
 
-res = []
-url = ''
-for i in range(0, 8):
-    print("response {}:".format(i))
+    # Create a new instance of the Chrome driver
+    driver = webdriver.Chrome(
+        "C:/Users/Nirman/AppData/Local/Programs/Python/Python37/chromedriver.exe")
 
-    # Create file name for image file
-    fileName = str(i)+'.json'
+    # Go to the specified website
+    driver.get(
+        'https://v3601506.v360.in/vision360.html?d=11914-516259491&z=1&surl=https%3a%2f%2fv3601506.v360.in%2f')
 
-    # open a file with given name with overwrite method
-    f = open(fileName, 'w')
+    time.sleep(20)
+    # Access requests via the `requests` attribute
+    count = 0
+    res = []
 
-    # url for fetching image of i.json file from v360 site
-    url = 'https://v3601506.v360.in/imaged/9366-497172313/' + \
-        str(i) + '.json?version=1'
+    for request in driver.requests:
+        count = count + 1
+        if request.response:
+            # startswith will fetch all the files with the file name
 
-    # append the obtained result to res
-    res.append((requests.get(url, headers=headers)).json())
+            if request.url.startswith("https://v3601506.v360.in/imaged/"):
+                print("url : ", request.url)
+                res.append(request.url)
 
-    # convert the json response to string to paste it to the file
-    fileContent = json.dumps(res[i])
+    print(count)
 
-    # write the content of res[i] to the file
-    f.write(fileContent)
-    print('Saving content to ', fileName)
+    print(res)
 
-    # close the file
-    f.close()
+    count = 0
+    json_result = []
 
-    print('length of file: ', len(res[i]))
+    for url in res:
+        # Create file name for image file
+        fileName = str(count)+'.json'
+
+        # open a file with given name with overwrite method
+        f = open(fileName, 'w')
+
+        # append the obtained result to res
+        json_result.append((requests.get(url, headers=headers)).json())
+
+        # convert the json response to string to paste it to the file
+        fileContent = json.dumps(json_result[count])
+
+        # write the content of res[i] to the file
+        f.write(fileContent)
+        print('Saving content to ', fileName)
+
+        # close the file
+        f.close()
+        print('length of file: ', len(json_result[count]))
+
+        count = count + 1
