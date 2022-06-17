@@ -5,9 +5,17 @@ headers = {
     'X-Requested-With': 'XMLHttpRequest'
 }
 
+'''
+    To do:
+    --> Make the program dynamic
+    --> Convert program to functional program
+'''
+
 res = []
 url = ''
 for i in range(0, 8):
+    print("response {}:".format(i))
+
     # Create file name for image file
     fileName = str(i)+'.json'
 
@@ -21,13 +29,14 @@ for i in range(0, 8):
     # append the obtained result to res
     res.append((requests.get(url, headers=headers)).json())
 
+    # convert the json response to string to paste it to the file
     fileContent = json.dumps(res[i])
 
     # write the content of res[i] to the file
     f.write(fileContent)
+    print('Saving content to ', fileName)
 
     # close the file
     f.close()
 
-    print("response {}:".format(i))
-    print(len(res[i]))
+    print('length of file: ', len(res[i]))
