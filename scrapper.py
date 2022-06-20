@@ -3,6 +3,7 @@ import requests
 import json
 import time
 import sys
+import os
 
 
 def main(argv):
@@ -31,6 +32,7 @@ def main(argv):
     # Access requests via the `requests` attribute
     count = 0
     urls = []
+    folder=''
 
     for request in driver.requests:
         count = count + 1
@@ -38,36 +40,51 @@ def main(argv):
         if request.response:
             # ----- startswith will fetch all the files with the file name and store them to urls
             if request.url.startswith("https://v3601506.v360.in/imaged/"):
-                print("url : ", request.url)
-                urls.append(request.url)
+                getUrl = request.url
+                print("url : ", getUrl)
+                urls.append(getUrl)
+
+                start = 'https://v3601506.v360.in/imaged/'
+                end = '/'
+                folder = (getUrl.split(start))[1].split(end)[0]
+                print(folder)
+                
+                
+                # folder = 'tempDir'
+                try:
+                    # Create target Directory
+                    os.mkdir(folder)
+                    print("Directory " , folder ,  " Created ") 
+                except FileExistsError:
+                    print("Directory " , folder ,  " already exists")
 
     print("Total requests made:", count)
     print("Urls extracted:", urls)
 
     count = 0
-    json_result = []
 
     # Check in individual url for the contents of the json file
     for url in urls:
+        json_result = []
         # Create file name for image file
-        fileName = str(count)+'.json'
+        # path = 'C:\\Users\\Username\\Path\\To\\File'
+
+        fileName = folder + '\\' + str(count) + '.json'
 
         # open a file with given name with overwrite method
-        f = open(fileName, 'w')
+        with open(fileName, 'w') as f:
+            # append the obtained result to res
+            json_result.append((requests.get(url, headers=headers)).json())
 
-        # append the obtained result to res
-        json_result.append((requests.get(url, headers=headers)).json())
+            # convert the json response to string to paste it to the file
+            fileContent = json.dumps(json_result[0])
 
-        # convert the json response to string to paste it to the file
-        fileContent = json.dumps(json_result[count])
+            # write the content of res[i] to the file
+            f.write(fileContent)
+            print('Saving content to ', fileName)
 
-        # write the content of res[i] to the file
-        f.write(fileContent)
-        print('Saving content to ', fileName)
-
-        # close the file
-        f.close()
-        print('length of file: ', len(json_result[count]))
+            # close the file
+            print('length of file: ', len(json_result[0]))
 
         count = count + 1
 
