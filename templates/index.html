@@ -7,17 +7,18 @@
 
     <body>
         <form class="grid" action="/result" method="POST">
-            {% if name %}
+            {% if count %} {% if filename %}
+
             <center>
                 <h3 style="color: blue" class="let_space">
-                    Hello {{name}}, How was your day!!
+                    Total {{count}} Files Saved to {{filename}}
                 </h3>
             </center>
 
-            {% endif %}
+            {% endif %} {% endif %}
 
-            <label for="name">Enter you name:</label>
-            <input type="text" id="name" name="name" />
+            <label for="name">Enter the link to extract json files: </label>
+            <input type="text" id="filename" name="filename" />
 
             <center><input class="file_submit" type="Submit" /></center>
         </form>

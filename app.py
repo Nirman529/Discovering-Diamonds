@@ -1,7 +1,8 @@
-from flask import Flask, render_template, url_for, request
+from flask import Flask, render_template, url_for
 from seleniumwire import webdriver
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
+import flask
 import requests
 import json
 import time
@@ -23,13 +24,13 @@ def home():
 
 @app.route('/result', methods=['POST', 'GET'])
 def result():
-    output = request.form.to_dict()
+    output = flask.request.form.to_dict()
     print(output)
 
-    name = output["name"]
+    filename = output["filename"]
 
     # argv = input("Enter url: ")
-    argv = name
+    argv = filename
     turl = argv
     # '''
     html = urlopen(turl).read()
@@ -114,18 +115,19 @@ def result():
             f.write(fileContent)
             # print('Saving content to ', fileName)
 
-            # close the file
             # print('length of file: ', len(json_result[count]))
 
+        # close the file
         f.close()
         count = count + 1
 
     # After the program execution is complete the driver is cleared
     del driver.requests
     print("Done execution")
+    filename = folder
     # '''
 
-    return render_template('index.html', name=count)
+    return render_template('index.html', count=count, filename=filename)
 
 
 if __name__ == "__main__":
