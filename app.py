@@ -39,6 +39,7 @@ def result():
     gotourl = tags.get('src')
 
     # print(gotourl)
+    # https://v360.in/movie/1506_8192-490175925
     # Header required for receiving the file in the localhost
     headers = {
         'X-Requested-With': 'XMLHttpRequest',
@@ -84,7 +85,7 @@ def result():
 
                 try:
                     # Create target Directory
-                    os.mkdir(folder)
+                    os.mkdir("v360player\\imaged\\"+folder)
                     # print("Directory ", folder,  " Created ")
                 except FileExistsError:
                     print()
@@ -101,7 +102,8 @@ def result():
         # Create file name for image file
         # path = 'C:\\Users\\Username\\Path\\To\\File'
 
-        fileName = folder + '\\' + str(count) + '.json'
+        fileName = "v360player\\imaged\\" + \
+            folder + '\\' + str(count) + '.json'
 
         # open a file with given name with overwrite method
         with open(fileName, 'w') as f:
